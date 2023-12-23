@@ -1,0 +1,49 @@
+---
+- name: Install and start nginx
+  hosts: web
+  become: yes # root privilege
+
+  tasks:
+  - name: install nginx
+    ansible.builtin.package:
+      name: nginx
+      state: present
+  - name: start nginx
+    ansible.builtin.service:
+      name: nginx
+      state: started
+
+---
+# we can write in another way
+# if the linux os is redhat/fedora/centos
+- name: Install and start nginx
+  hosts: web
+  become: yes
+  
+  tasks:
+  - name: install nginx
+    yum:
+      name: nginx
+      state: present
+  - name: start nginx
+    service:
+      name: nginx
+      state: started
+
+---
+# if the linux os is ubuntu/debian os
+- name: Install and start nginx
+  hosts: web
+  become: yes
+  
+  tasks:
+  - name: install nginx
+    apt:
+      name: nginx
+      state: present
+  - name: start nginx
+    service:
+      name: nginx
+      state: started
+
+---
