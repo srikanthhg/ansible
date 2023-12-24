@@ -1,5 +1,5 @@
-- name: setup user server
-  hosts: user
+- name: setup cart server
+  hosts: cart
   become: yes
   tasks:
   - name: disable old nodejs and enable new nodejs
@@ -19,14 +19,14 @@
       path: /app
       state: directory
 
-  - name: download user application
+  - name: download cart application
     ansible.builtin.get_url:
-      url: https://roboshop-builds.s3.amazonaws.com/user.zip
+      url: https://roboshop-builds.s3.amazonaws.com/cart.zip
       dest: /tmp
 
-  - name: unzip user application
+  - name: unzip cart application
     ansible.builtin.unarchive:
-      src: /tmp/user.zip
+      src: /tmp/cart.zip
       dest: /app
       remote_src: yes
 
@@ -35,30 +35,19 @@
     args:
       chdir: /app
 
-  - name: setup systemd user service
+  - name: setup systemd cart service
     ansible.builtin.copy:
-      src:user.service
-      dest: /etc/systemd/system/user.service
+      src: cart.service
+      dest: /etc/systemd/system/cart.service
 
   - name: reload systemd
     ansible.builtin.systemd_service:
       daemon_reload: true
 
-  - name: copy mongodb repo
-    ansible.builtin.copy:
-      src: mongo.repo
-      dest: /etc/yum.repos.d/mongo.repo
-
-  - name: install mongodb client
-    ansible.builtin.package:
-      name: mongodb-org-shell
-      state: present
-
-  - name: load user data
-    ansible.builtin.command: mongo --host MONGODB-SERVER-IPADDRESS < /app/schema/user.js
-
-  - name: start and enable user service
+  - name: start and enable cart
     ansible.builtin.service:
-      name: user
+      name: cart
       state: restarted
       enabled: yes
+
+
