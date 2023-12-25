@@ -50,7 +50,7 @@
   - name: install mysql
     ansible.builtin.package:
       name: mysql
-      state: started
+      state: present
 
   - name: loading schema
     ansible.builtin.command: mysql -h 172.31.10.75 -uroot -pRoboShop@1 < /app/schema/shipping.sql 
