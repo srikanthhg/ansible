@@ -15,10 +15,16 @@
       state: present
 
   - name: allow remote connections
-    ansible.builtin.lineinfile:
+    ansible.builtin.replace:
       path: /etc/redis/redis.conf   
-      regexp: "127.0.0.1"
-      line: 127.0.0.1 0.0.0.0
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
+  
+  - name: allow remote connectionss
+    ansible.builtin.replace:
+      path: /etc/redis.conf   
+      regexp: '127.0.0.1'
+      replace: '0.0.0.0'
 
   # - name: allow remote connections
   #   ansible.builtin.replace:
