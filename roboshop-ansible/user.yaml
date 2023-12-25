@@ -55,7 +55,7 @@
       state: present
 
   - name: load user data
-    ansible.builtin.command: mongo --host MONGODB-SERVER-IPADDRESS < /app/schema/user.js
+    ansible.builtin.command: mongo --host 172.31.10.215 < /app/schema/user.js
 
   - name: start and enable user service
     ansible.builtin.service:
