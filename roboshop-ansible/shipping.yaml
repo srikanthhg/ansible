@@ -41,7 +41,7 @@
   - name: setup systemd shipping service
     ansible.builtin.copy:
       src: shipping.service
-      dest: /etc/systemd/system/cshipping.service
+      dest: /etc/systemd/system/shipping.service
 
   - name: reload systemd
     ansible.builtin.systemd_service:
