@@ -1,6 +1,7 @@
 - name: setup user server
   hosts: user
   become: yes
+
   tasks:
   - name: disable old nodejs and enable new nodejs
     ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
@@ -37,7 +38,7 @@
 
   - name: setup systemd user service
     ansible.builtin.copy:
-      src:user.service
+      src: user.service
       dest: /etc/systemd/system/user.service
 
   - name: reload systemd
