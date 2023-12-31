@@ -1,0 +1,51 @@
+- name: disable old nodejs and enable new nodejs
+    ansible.builtin.shell: dnf module disable nodejs -y ; dnf module enable nodejs:18 -y
+
+- name: install nodejs
+  ansible.builtin.package:
+    name: nodejs
+    state: present
+  
+- name: common tasks
+  ansible.builtin.import_tasks:
+    name: commom
+    tasks_from:
+
+- name: install dependencies
+  ansible.builtin.command: npm install
+  args:
+    chdir: /app
+
+- name: setup systemd catalogue service
+  ansible.builtin.copy:
+    src: catalogue.service
+    dest: /etc/systemd/system/catalogue.service
+
+- name: reload systemd
+  ansible.builtin.systemd_service:
+    daemon_reload: true
+
+- name: copy mongodb repo
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: install mongodb client
+  ansible.builtin.package:
+    name: mongodb-org-shell
+    state: present
+
+- name: get the categories count
+  ansible.builtin.command: mongo --host 172.31.10.215 --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+  register: product_count
+
+- name: load catalogue data
+  ansible.builtin.command: mongo --host 172.31.10.215 < /app/schema/catalogue.js
+  when: product_count.stdout|int == 0
+  # when: product_count.stdout == "0"
+
+- name: start and enable catalogue service
+  ansible.builtin.service:
+    name: catalogue
+    state: restarted
+    enabled: yes

@@ -1,0 +1,13 @@
+/etc/ansible/ansible.cfg
+cd /etc/ansible
+ansible-config init --disabled > ansible.cfg
+
+vi ansible.cfg
+host_key_checking=False
+
+
+ansible -i inventory all -m shell -a 'ping -c 3 8.8.8.8'
+ansible -i inventory all -m shell -a 'df-h'
+ansible -i inventory all -u ubuntu -m shell -a 'touch /tmp/hello1' --become
+
+

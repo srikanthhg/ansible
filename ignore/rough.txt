@@ -1,0 +1,21 @@
+web 172.31.10.119  54.237.18.159
+
+catalogue 172.31.10.179
+cart 172.31.10.92
+user 172.31.10.110
+shipping 172.31.10.229
+payments 172.31.10.176
+ratings dispatch 172.31.10.254
+
+mongodb 172.31.10.215
+redis 172.31.10.64
+mysql 172.31.10.75
+rabbit mq 172.31.10.67
+
+ansible-playbook -i inventory.ini -e ansible_user=centos -e ansible_password=DevOps321  
+
+https://github.com/srikanthhg/ansible.git
+
+ mongo --host 172.31.10.215 --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+
+                                           'db = db.getSiblingDB('users'); db.users.count()'
